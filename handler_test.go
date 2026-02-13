@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MatusOllah/slogcolor"
+	"github.com/SladkyCitron/slogcolor"
 	"github.com/fatih/color"
 )
 

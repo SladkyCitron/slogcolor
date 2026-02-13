@@ -1,4 +1,4 @@
-module github.com/MatusOllah/slogcolor
+module github.com/SladkyCitron/slogcolor
 
 go 1.22.0
 

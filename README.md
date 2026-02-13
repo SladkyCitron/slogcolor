@@ -1,8 +1,8 @@
 # 🌈 slogcolor
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/MatusOllah/slogcolor.svg)](https://pkg.go.dev/github.com/MatusOllah/slogcolor) [![Go Report Card](https://goreportcard.com/badge/github.com/MatusOllah/slogcolor)](https://goreportcard.com/report/github.com/MatusOllah/slogcolor) [![Go](https://github.com/MatusOllah/slogcolor/actions/workflows/go.yml/badge.svg)](https://github.com/MatusOllah/slogcolor/actions/workflows/go.yml) [![GitHub license](https://img.shields.io/github/license/MatusOllah/slogcolor)](https://github.com/MatusOllah/slogcolor/blob/main/LICENSE) [![Made in Slovakia](https://raw.githubusercontent.com/pedromxavier/flag-badges/refs/heads/main/badges/SK.svg)](https://www.youtube.com/watch?v=UqXJ0ktrmh0)
+[![Go Reference](https://pkg.go.dev/badge/github.com/SladkyCitron/slogcolor.svg)](https://pkg.go.dev/github.com/SladkyCitron/slogcolor) [![Go Report Card](https://goreportcard.com/badge/github.com/SladkyCitron/slogcolor)](https://goreportcard.com/report/github.com/SladkyCitron/slogcolor) [![Go](https://github.com/SladkyCitron/slogcolor/actions/workflows/go.yml/badge.svg)](https://github.com/SladkyCitron/slogcolor/actions/workflows/go.yml) [![GitHub license](https://img.shields.io/github/license/SladkyCitron/slogcolor)](https://github.com/SladkyCitron/slogcolor/blob/main/LICENSE) [![Made in Slovakia](https://raw.githubusercontent.com/pedromxavier/flag-badges/refs/heads/main/badges/SK.svg)](https://www.youtube.com/watch?v=UqXJ0ktrmh0)
 
-![screenshot](https://github.com/MatusOllah/slogcolor/blob/main/screenshot.png)
+![screenshot](https://github.com/SladkyCitron/slogcolor/blob/main/screenshot.png)
 
 **slogcolor** is a little, customizable color handler for `log/slog`. It enhances log readability by color-coding log levels and supports flexible formatting options.
 Its output is inspired by XMRig and zerolog.
@@ -12,7 +12,7 @@ Its output is inspired by XMRig and zerolog.
 Run:
 
 ```sh
-go get -u github.com/MatusOllah/slogcolor
+go get -u github.com/SladkyCitron/slogcolor
 ```
 
 ## Basic Usage
@@ -26,7 +26,7 @@ import (
     "errors"
     "log/slog"
 
-    "github.com/MatusOllah/slogcolor"
+    "github.com/SladkyCitron/slogcolor"
 )
 
 func main() {
@@ -42,7 +42,7 @@ func main() {
 
 ### Default options
 
-slogcolor provides a set of predefined options to simplify configuration. You can use these default options via [`DefaultOptions`](https://pkg.go.dev/github.com/MatusOllah/slogcolor#DefaultOptions), or simply pass `nil` for the same effect.
+slogcolor provides a set of predefined options to simplify configuration. You can use these default options via [`DefaultOptions`](https://pkg.go.dev/github.com/SladkyCitron/slogcolor#DefaultOptions), or simply pass `nil` for the same effect.
 
 ```go
 slog.SetDefault(slog.New(slogcolor.NewHandler(os.Stderr, slogcolor.DefaultOptions)))
@@ -56,7 +56,7 @@ The behavior is identical in both cases, so you can choose based on your coding 
 
 ### Customized output format
 
-The output format can also be customized using the [`Options`](https://pkg.go.dev/github.com/MatusOllah/slogcolor#Options) like this:
+The output format can also be customized using the [`Options`](https://pkg.go.dev/github.com/SladkyCitron/slogcolor#Options) like this:
 
 ```go
 opts := &slogcolor.Options{
@@ -82,7 +82,7 @@ slog.SetDefault(slog.New(slogcolor.NewHandler(os.Stderr, opts)))
 
 Prefixes can be useful for adding context to log messages, such as identifying different subsystems or components (e.g., `DB`, `SceneController`, `Network`) that generated the log.
 
-Messages can be prefixed with [`Prefix`](https://pkg.go.dev/github.com/MatusOllah/slogcolor#Prefix) like this:
+Messages can be prefixed with [`Prefix`](https://pkg.go.dev/github.com/SladkyCitron/slogcolor#Prefix) like this:
 
 ```go
 slog.Info(slogcolor.Prefix("MyPrefix", "kajšmentke"))
@@ -121,4 +121,4 @@ slog.SetDefault(slog.New(slogcolor.NewHandler(w, opts)))
 
 ## License
 
-Licensed under the **MIT License** (see [LICENSE](https://github.com/MatusOllah/slogcolor/blob/main/LICENSE))
+Licensed under the **MIT License** (see [LICENSE](https://github.com/SladkyCitron/slogcolor/blob/main/LICENSE))

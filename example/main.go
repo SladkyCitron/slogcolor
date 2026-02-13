@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/MatusOllah/slogcolor"
+	"github.com/SladkyCitron/slogcolor"
 )
 
 func main() {
