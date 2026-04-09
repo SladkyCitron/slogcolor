@@ -62,4 +62,8 @@ type Options struct {
 
 	// LevelTags is level tag for message, default: DefaultLevelStyles
 	LevelTags map[slog.Level]string
+
+	// ValueFormatter formats attribute values before they are written.
+	// If nil, [slog.Value.String] is used.
+	ValueFormatter func(slog.Value) string
 }
