@@ -142,11 +142,11 @@ func (h *Handler) Handle(_ context.Context, r slog.Record) error {
 			}
 		}
 
+		keyColor := color.New(color.FgCyan)
 		if strings.Contains(a.Key, "err") {
-			buf.WriteString(color.New(color.FgRed).Sprintf("%s=", a.Key) + formatValue(a.Value, h.opts.ValueFormatter))
-		} else {
-			buf.WriteString(color.New(color.FgCyan).Sprintf("%s=", a.Key) + formatValue(a.Value, h.opts.ValueFormatter))
+			keyColor = color.New(color.FgRed)
 		}
+		buf.WriteString(keyColor.Sprintf("%s=", a.Key) + formatValue(a.Value, h.opts.ValueFormatter))
 	}
 
 	buf.WriteByte('\n')
