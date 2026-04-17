@@ -71,17 +71,17 @@ func (h *Handler) Enabled(_ context.Context, level slog.Level) bool {
 
 // Handle implements slog.Handler.Handle .
 func (h *Handler) Handle(_ context.Context, r slog.Record) error {
-	bf := getBuffer()
-	bf.Reset()
+	buf := getBuffer()
+	buf.Reset()
 
 	if !h.opts.NoTime && !r.Time.IsZero() {
-		fmt.Fprint(bf, color.New(color.Faint).Sprint(r.Time.Format(h.opts.TimeFormat)))
-		fmt.Fprint(bf, " ")
+		fmt.Fprint(buf, color.New(color.Faint).Sprint(r.Time.Format(h.opts.TimeFormat)))
+		fmt.Fprint(buf, " ")
 	}
 
-	fmt.Fprint(bf, h.opts.LevelTags[r.Level])
+	fmt.Fprint(buf, h.opts.LevelTags[r.Level])
 
-	fmt.Fprint(bf, " ")
+	fmt.Fprint(buf, " ")
 
 	if h.opts.SrcFileMode != Nop {
 		if r.PC != 0 {
@@ -106,7 +106,7 @@ func (h *Handler) Handle(_ context.Context, r slog.Record) error {
 				lenStr := strconv.Itoa(h.opts.SrcFileLength)
 				formatted = fmt.Sprintf("%-"+lenStr+"s", filename+lineStr)
 			}
-			fmt.Fprint(bf, formatted)
+			fmt.Fprint(buf, formatted)
 		}
 	}
 
@@ -118,7 +118,7 @@ func (h *Handler) Handle(_ context.Context, r slog.Record) error {
 		return true
 	})
 
-	fmt.Fprint(bf, h.opts.MsgPrefix)
+	fmt.Fprint(buf, h.opts.MsgPrefix)
 	formattedMessage := r.Message
 	if h.opts.MsgLength > 0 && len(attrs) > 0 {
 		if len(formattedMessage) > h.opts.MsgLength {
@@ -132,35 +132,35 @@ func (h *Handler) Handle(_ context.Context, r slog.Record) error {
 	if h.opts.MsgColor == nil {
 		h.opts.MsgColor = color.New() // set to empty otherwise we have a null pointer
 	}
-	fmt.Fprintf(bf, "%s", h.opts.MsgColor.Sprint(formattedMessage))
+	fmt.Fprintf(buf, "%s", h.opts.MsgColor.Sprint(formattedMessage))
 
 	for _, a := range attrs {
-		fmt.Fprint(bf, " ")
+		fmt.Fprint(buf, " ")
 		for i, g := range h.groups {
-			fmt.Fprint(bf, color.New(color.FgCyan).Sprint(g))
+			fmt.Fprint(buf, color.New(color.FgCyan).Sprint(g))
 			if i != len(h.groups) {
-				fmt.Fprint(bf, color.New(color.FgCyan).Sprint("."))
+				fmt.Fprint(buf, color.New(color.FgCyan).Sprint("."))
 			}
 		}
 
 		if strings.Contains(a.Key, "err") {
-			fmt.Fprint(bf, color.New(color.FgRed).Sprintf("%s=", a.Key)+formatValue(a.Value, h.opts.ValueFormatter))
+			fmt.Fprint(buf, color.New(color.FgRed).Sprintf("%s=", a.Key)+formatValue(a.Value, h.opts.ValueFormatter))
 		} else {
-			fmt.Fprint(bf, color.New(color.FgCyan).Sprintf("%s=", a.Key)+formatValue(a.Value, h.opts.ValueFormatter))
+			fmt.Fprint(buf, color.New(color.FgCyan).Sprintf("%s=", a.Key)+formatValue(a.Value, h.opts.ValueFormatter))
 		}
 	}
 
-	fmt.Fprint(bf, "\n")
+	fmt.Fprint(buf, "\n")
 
 	if h.opts.NoColor {
-		stripANSI(bf)
+		stripANSI(buf)
 	}
 
 	h.mu.Lock()
-	_, err := io.Copy(h.out, bf)
+	_, err := io.Copy(h.out, buf)
 	h.mu.Unlock()
 
-	freeBuffer(bf)
+	freeBuffer(buf)
 
 	return err
 }
