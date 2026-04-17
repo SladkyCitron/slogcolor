@@ -75,13 +75,12 @@ func (h *Handler) Handle(_ context.Context, r slog.Record) error {
 	buf.Reset()
 
 	if !h.opts.NoTime && !r.Time.IsZero() {
-		fmt.Fprint(buf, color.New(color.Faint).Sprint(r.Time.Format(h.opts.TimeFormat)))
-		fmt.Fprint(buf, " ")
+		buf.WriteString(color.New(color.Faint).Sprint(r.Time.Format(h.opts.TimeFormat)))
+		buf.WriteByte(' ')
 	}
 
-	fmt.Fprint(buf, h.opts.LevelTags[r.Level])
-
-	fmt.Fprint(buf, " ")
+	buf.WriteString(h.opts.LevelTags[r.Level])
+	buf.WriteByte(' ')
 
 	if h.opts.SrcFileMode != Nop {
 		if r.PC != 0 {
@@ -106,7 +105,7 @@ func (h *Handler) Handle(_ context.Context, r slog.Record) error {
 				lenStr := strconv.Itoa(h.opts.SrcFileLength)
 				formatted = fmt.Sprintf("%-"+lenStr+"s", filename+lineStr)
 			}
-			fmt.Fprint(buf, formatted)
+			buf.WriteString(formatted)
 		}
 	}
 
@@ -118,7 +117,7 @@ func (h *Handler) Handle(_ context.Context, r slog.Record) error {
 		return true
 	})
 
-	fmt.Fprint(buf, h.opts.MsgPrefix)
+	buf.WriteString(h.opts.MsgPrefix)
 	formattedMessage := r.Message
 	if h.opts.MsgLength > 0 && len(attrs) > 0 {
 		if len(formattedMessage) > h.opts.MsgLength {
@@ -132,25 +131,25 @@ func (h *Handler) Handle(_ context.Context, r slog.Record) error {
 	if h.opts.MsgColor == nil {
 		h.opts.MsgColor = color.New() // set to empty otherwise we have a null pointer
 	}
-	fmt.Fprintf(buf, "%s", h.opts.MsgColor.Sprint(formattedMessage))
+	buf.WriteString(h.opts.MsgColor.Sprint(formattedMessage))
 
 	for _, a := range attrs {
-		fmt.Fprint(buf, " ")
+		buf.WriteByte(' ')
 		for i, g := range h.groups {
-			fmt.Fprint(buf, color.New(color.FgCyan).Sprint(g))
+			buf.WriteString(color.New(color.FgCyan).Sprint(g))
 			if i != len(h.groups) {
-				fmt.Fprint(buf, color.New(color.FgCyan).Sprint("."))
+				buf.WriteString(color.New(color.FgCyan).Sprint("."))
 			}
 		}
 
 		if strings.Contains(a.Key, "err") {
-			fmt.Fprint(buf, color.New(color.FgRed).Sprintf("%s=", a.Key)+formatValue(a.Value, h.opts.ValueFormatter))
+			buf.WriteString(color.New(color.FgRed).Sprintf("%s=", a.Key) + formatValue(a.Value, h.opts.ValueFormatter))
 		} else {
-			fmt.Fprint(buf, color.New(color.FgCyan).Sprintf("%s=", a.Key)+formatValue(a.Value, h.opts.ValueFormatter))
+			buf.WriteString(color.New(color.FgCyan).Sprintf("%s=", a.Key) + formatValue(a.Value, h.opts.ValueFormatter))
 		}
 	}
 
-	fmt.Fprint(buf, "\n")
+	buf.WriteByte('\n')
 
 	if h.opts.NoColor {
 		stripANSI(buf)
