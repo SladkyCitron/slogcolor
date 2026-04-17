@@ -15,6 +15,14 @@ import (
 	"github.com/fatih/color"
 )
 
+func formatValue(v slog.Value, formatter func(slog.Value) string) string {
+	if formatter != nil {
+		return formatter(v)
+	}
+
+	return v.String()
+}
+
 // Handler is a colored slog handler.
 type Handler struct {
 	groups []string
@@ -136,9 +144,9 @@ func (h *Handler) Handle(_ context.Context, r slog.Record) error {
 		}
 
 		if strings.Contains(a.Key, "err") {
-			fmt.Fprint(bf, color.New(color.FgRed).Sprintf("%s=", a.Key)+a.Value.String())
+			fmt.Fprint(bf, color.New(color.FgRed).Sprintf("%s=", a.Key)+formatValue(a.Value, h.opts.ValueFormatter))
 		} else {
-			fmt.Fprint(bf, color.New(color.FgCyan).Sprintf("%s=", a.Key)+a.Value.String())
+			fmt.Fprint(bf, color.New(color.FgCyan).Sprintf("%s=", a.Key)+formatValue(a.Value, h.opts.ValueFormatter))
 		}
 	}
 
