@@ -14,15 +14,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v6
       with:
         go-version-file: "go.mod"
 
     - name: Vet
       run: go vet ./...
+
+    - name: Test
+      run: go test -v ./...
 
     - name: Build
       run: go build -v ./...
